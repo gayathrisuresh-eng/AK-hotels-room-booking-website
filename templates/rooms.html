@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">AVAILABLE ROOMS</h2>
+    {% for room in rooms %}
+        <div class= "card mb-3 p-3" >
+            <h5>Room{{room.room_number}}-{{room.room_type}}-{{room.price}}</h5>
+            {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'book_room' room.id %}">
+                    {% csrf_token %}
+                    <label>check-in:</label>
+                    <input type="date" name="check_in"required>
+                    <label>check-out:</label>
+                    <input type="date" name="check_out"required><br><br>
+                    <button type="submit" class="btn btn-success">Book</button>
+                </form>
+        {% else %}
+            <p class="text-danger">
+                please<a href="{% url 'login' %}">login</a>to book this room
+            </p>
+            {% endif %}
+        </div>
+        {% empty %}
+            <p>SORRY! NO ROOMS AVAILABLE</p>
+</div>
+{% endfor %}
+{% endblock %}
